@@ -9,7 +9,7 @@ class ProgressPanel extends Helper{
     /**
      * status game
      */
-    static statusGame = true
+    static statusGame = false
 
     constructor(appStage, rendererWidth, rendererHeight, balance = 200, bet = 5, win = 0){
 

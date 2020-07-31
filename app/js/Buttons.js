@@ -3,6 +3,8 @@
  */
 import { Helper } from './Helper.js'
 
+import { ProgressPanel } from './ProgressPanel.js'
+
 export { Buttons }
 
 class Buttons extends Helper{
@@ -111,9 +113,10 @@ class Buttons extends Helper{
                 /**
                  * set alert of game over
                  */
-            }
+                alert('Sorry, but GAME OVER! Give me money to continue game CN ... ... ... ...')
+                location.reload()
 
-            
+            }
             
           }, 3000)
     }
