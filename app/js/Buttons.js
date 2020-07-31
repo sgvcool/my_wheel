@@ -2,8 +2,8 @@
  * Helper class with alter functions
  */
 import { Helper } from './Helper.js'
-
 import { ProgressPanel } from './ProgressPanel.js'
+import { WheelOfFortune } from './WheelOfFortune.js'
 
 export { Buttons }
 
@@ -14,6 +14,8 @@ class Buttons extends Helper{
      */
     static btns = {}
     static ticker
+
+    currentRouletteNumber = 0
 
     constructor(loader, ticker, appStage, rouletCenterX, rouletCenterY, bets){
 
@@ -66,7 +68,7 @@ class Buttons extends Helper{
     }
 
     /**
-     * init rotate roulatte by click on btns 
+     * init rotate roulette by click on btns 
      */
     setButtonClick(btn) {
 
@@ -86,12 +88,13 @@ class Buttons extends Helper{
             /**
              * set user bet
              */
-
+            ProgressPanel.setUserBet(btn.betValue)
 
             /**
              * set roulette number
              */
-
+            this.currentRouletteNumber = WheelOfFortune.getRouletteNumber()
+            //console.log(this.currentRouletteNumber)
             
             /**
              * set bellance
@@ -107,7 +110,15 @@ class Buttons extends Helper{
              * get status game
              */
             if(ProgressPanel.statusGame){
+
+                /**
+                 * update progress panell
+                 */
+
+
                 Buttons.setBtnStatus('enabled')
+
+                
             }else{
 
                 /**
@@ -115,9 +126,8 @@ class Buttons extends Helper{
                  */
                 alert('Sorry, but GAME OVER! Give me money to continue game CN ... ... ... ...')
                 location.reload()
-
             }
-            
+
           }, 3000)
     }
 
@@ -131,22 +141,20 @@ class Buttons extends Helper{
         switch(status) {
             case 'disabled':  
                 for(let key of btnsKeys){
-                    Buttons.btns[key].buttonMode = false;
-                    Buttons.btns[key].interactive = false;
-                    Buttons.btns[key].tint = 0x333333;
+                    Buttons.btns[key].buttonMode = false
+                    Buttons.btns[key].interactive = false
+                    Buttons.btns[key].tint = 0x333333
                 }
                 break
           
             case 'enabled': 
                 for(let key of btnsKeys){
-                    Buttons.btns[key].buttonMode = true;
-                    Buttons.btns[key].interactive = true;
-                    Buttons.btns[key].tint = 0xFFFFFF;
+                    Buttons.btns[key].buttonMode = true
+                    Buttons.btns[key].interactive = true
+                    Buttons.btns[key].tint = 0xFFFFFF
                 }
                 break
         }
-
-        //console.log(status)
     }
 
     setBtnEvent(
@@ -168,11 +176,11 @@ class Buttons extends Helper{
     }
 
     setMouseOver(btn) {
-        btn.tint = 0x333333;
+        btn.tint = 0x333333
     }
 
     setMouseOut(btn) {
-        btn.tint = 0xffffff;
+        btn.tint = 0xffffff
     }
 }
 

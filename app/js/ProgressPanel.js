@@ -9,7 +9,7 @@ class ProgressPanel extends Helper{
     /**
      * status game
      */
-    static statusGame = false
+    static statusGame = true
 
     constructor(appStage, rendererWidth, rendererHeight, balance = 200, bet = 5, win = 0){
 
@@ -24,7 +24,7 @@ class ProgressPanel extends Helper{
          * default value ballance
          */
         this.balance = balance
-        this.bet = bet
+        this.bet = bet // user bet
         this.win = win
 
         this.step = 0
@@ -86,11 +86,10 @@ class ProgressPanel extends Helper{
         this.appStage.addChild(winPanel)
     }
 
-
     /**
      * set user bet
      */
-    setUserBet(bet){
+    static setUserBet(bet){
         this.bet = bet //curently user bet not roulette number
     }
 

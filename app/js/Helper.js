@@ -19,13 +19,6 @@ class Helper{
     return numText;
   }
   
-  getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-  
-    return Math.floor(Math.random() * (max - min)) + min;
-  }
-  
   degToRadians(deg) {
     return deg * (Math.PI / 180);
   }

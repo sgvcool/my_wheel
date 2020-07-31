@@ -5,13 +5,26 @@ export { WheelOfFortune }
  */
 import { Helper } from './Helper.js'
 
-/**
- * default variable for animation rotate roulette
- */
-let angleStep = 0 // default sector, on strart 0
-let extCircleImg, intCircleImg // external and internal images for rotate
-
 class WheelOfFortune extends Helper{
+
+    /**
+     * array numbers like as rendered on the roulette
+     */
+    static showRouletteNumbers = [3,5,1,1,1,3,1,1,3,3,1,5]
+
+    /**
+     * default variable for animation rotate roulette
+     */
+    static sectorDegree = 0 // default sector, on strart 0 then 30
+
+    static totalRandom = 0
+    static currentSectorPosition = 0
+    
+    /**
+     * external and internal circle roulette images
+     */
+    static extCircleImg
+    static intCircleImg 
 
     constructor(loader, rouletCenterX, rouletCenterY, rouletteNumbers = [3,1,1,3,1,1,1,5,3,5,1,3]){
         super()
@@ -27,19 +40,52 @@ class WheelOfFortune extends Helper{
         this.rouletteNumbers = rouletteNumbers
     }
 
+    /**
+     * rotate roulette function
+     */
     rotate() {
-        const random = Math.floor(Math.random() * (11 - 1)) + 1
+        const random = Math.floor(Math.random() * (12 - 1)) + 1;
         
-        if (angleStep === 0) {
-            extCircleImg.angle += 15 // middle our ext roulette img
-            intCircleImg.angle += 30 // ot baldy
-            angleStep = 30 // one sector in degree
+        if (WheelOfFortune.sectorDegree === 0) {
+            WheelOfFortune.extCircleImg.angle += 15 // middle our ext roulette img
+            WheelOfFortune.intCircleImg.angle += 30 // ot baldy
+            WheelOfFortune.sectorDegree = 30 // one sector in degre
         } else {
-            extCircleImg.angle += angleStep * random;
-            intCircleImg.angle += angleStep * random;
+
+            /**
+             * rotate our roulette
+             */
+            WheelOfFortune.extCircleImg.angle += WheelOfFortune.sectorDegree * random
+            WheelOfFortune.intCircleImg.angle += WheelOfFortune.sectorDegree * random
+
+            WheelOfFortune.totalRandom += random
         }
     }
 
+    /**
+     * set roulette number after user click and set bet
+     */
+    static getRouletteNumber() {
+
+        for (var i = 0; i < WheelOfFortune.totalRandom; i++) {
+            if (WheelOfFortune.currentSectorPosition < 11) {
+                WheelOfFortune.currentSectorPosition++
+            } else {
+                WheelOfFortune.currentSectorPosition = 0
+            }
+        }
+
+        WheelOfFortune.totalRandom = 0
+        return WheelOfFortune.showRouletteNumbers[WheelOfFortune.currentSectorPosition]
+    }
+
+    /**
+     * render wheel of fortune
+     * @param {*} loader 
+     * @param {*} appStage 
+     * @param {*} rendererWidth 
+     * @param {*} rendererHeight 
+     */
     initWheelOfFortune(loader, appStage, rendererWidth, rendererHeight){
 
         /**
@@ -53,9 +99,9 @@ class WheelOfFortune extends Helper{
         /**
          * render external circle with numbers
          */
-        extCircleImg = new PIXI.Sprite(loader.resources.extCircle.texture)
-        extCircleImg.anchor.x = 0.5
-        extCircleImg.anchor.y = 0.5
+        WheelOfFortune.extCircleImg = new PIXI.Sprite(loader.resources.extCircle.texture)
+        WheelOfFortune.extCircleImg.anchor.x = 0.5
+        WheelOfFortune.extCircleImg.anchor.y = 0.5
 
         const sectoredWheelContainer = new PIXI.Container()
         sectoredWheelContainer.width = 300
@@ -81,22 +127,22 @@ class WheelOfFortune extends Helper{
         }
 
         sectoredWheelContainer.position.set(0, 0)
-        extCircleImg.addChild(sectoredWheelContainer)
-        extCircleImg.position.set(
+        WheelOfFortune.extCircleImg.addChild(sectoredWheelContainer)
+        WheelOfFortune.extCircleImg.position.set(
             this.rouletCenterX + 150,
             (rendererHeight - 600) / 2 + 50 + 150
         );
-        appStage.addChild(extCircleImg)
+        appStage.addChild(WheelOfFortune.extCircleImg)
 
         /**
          * render internal circle roulete
          */
-        intCircleImg = new PIXI.Sprite(loader.resources.intCircle.texture)
-        intCircleImg.x = (rendererWidth - 108) / 2 + 54
-        intCircleImg.y = (rendererHeight - 600) / 2 + 150 + 54 //150 radius of extCircle, 50 top padding of extCircle, 54 intCircleRadius
-        intCircleImg.anchor.x = 0.5
-        intCircleImg.anchor.y = 0.5
-        appStage.addChild(intCircleImg)
+        WheelOfFortune.intCircleImg = new PIXI.Sprite(loader.resources.intCircle.texture)
+        WheelOfFortune.intCircleImg.x = (rendererWidth - 108) / 2 + 54
+        WheelOfFortune.intCircleImg.y = (rendererHeight - 600) / 2 + 150 + 54 //150 radius of extCircle, 50 top padding of extCircle, 54 intCircleRadius
+        WheelOfFortune.intCircleImg.anchor.x = 0.5
+        WheelOfFortune.intCircleImg.anchor.y = 0.5
+        appStage.addChild(WheelOfFortune.intCircleImg)
 
         /**
          * render spinner image
@@ -105,31 +151,5 @@ class WheelOfFortune extends Helper{
         spinnerImg.x = (rendererWidth - 40) / 2 // 40 spinner width
         spinnerImg.y = (rendererHeight - 600) / 2 //600 bg height, 80 spinner height
         appStage.addChild(spinnerImg)
-    }
-
-    
-
-
-    
-
-
-
-
-
-
-    getWinNumber() {
-        for (var i = 0; i < this.animationSteps; i++) {
-
-
-            // if (this.currentWinPosition < 11) {
-            //     this.currentWinPosition++
-            // } else {
-            //     this.currentWinPosition = 0
-            // }
-
-
-        }
-        //this.animationSteps = 0;
-        //return this.wheelNumbersWithOffset[this.currentWinPosition];
     }
 }
