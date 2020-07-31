@@ -94,17 +94,17 @@ class Buttons extends Helper{
              * set roulette number
              */
             this.currentRouletteNumber = WheelOfFortune.getRouletteNumber()
-            //console.log(this.currentRouletteNumber)
+            ProgressPanel.setRouletteCurNumber(this.currentRouletteNumber)
+
+            /**
+             * update bet panel
+             */
+            ProgressPanel.betPanel.text = `Bet: ${btn.betValue}`
             
             /**
              * set bellance
              */
-
-            
-            /**
-             * set game status
-             */
-
+            ProgressPanel.setBellance()
 
             /**
              * get status game
@@ -114,11 +114,7 @@ class Buttons extends Helper{
                 /**
                  * update progress panell
                  */
-
-
                 Buttons.setBtnStatus('enabled')
-
-                
             }else{
 
                 /**

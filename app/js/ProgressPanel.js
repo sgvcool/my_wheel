@@ -4,12 +4,23 @@
 import { Helper } from './Helper.js'
 
 export { ProgressPanel }
+
 class ProgressPanel extends Helper{
 
     /**
      * status game
      */
     static statusGame = true
+    static balance
+    static userBet
+    static win
+
+    /**
+     * varuable for render panel
+     */
+    static balancePanel 
+    static betPanel
+    static winPanel
 
     constructor(appStage, rendererWidth, rendererHeight, balance = 200, bet = 5, win = 0){
 
@@ -23,12 +34,12 @@ class ProgressPanel extends Helper{
         /**
          * default value ballance
          */
-        this.balance = balance
-        this.bet = bet // user bet
-        this.win = win
+        ProgressPanel.balance = balance
+        ProgressPanel.userBet = bet // user bet
+        ProgressPanel.win = win
 
         this.step = 0
-        this.wheelNumber = 0
+        this.rouletteCurNumber = 0
 
         /**
          * render black bg progress panel
@@ -64,89 +75,118 @@ class ProgressPanel extends Helper{
         /**
          * render elements progress panel
          */
-        const balancePanel = this.createTextTexture(
-            "Balance: " + this.balance, 
+        ProgressPanel.balancePanel = this.createTextTexture(
+            "Balance: " + ProgressPanel.balance, 
             (this.rendererWidth - 800) / 2 + 170,
             (this.rendererHeight + 570) / 2
         );
-        this.appStage.addChild(balancePanel)
+        this.appStage.addChild(ProgressPanel.balancePanel)
 
-        const betPanel = this.createTextTexture(
-            "Bet: " + this.bet, 
+        ProgressPanel.betPanel = this.createTextTexture(
+            "Bet: " + ProgressPanel.userBet, 
             (this.rendererWidth - 800) / 2 + 370, 
             600
         );
-        this.appStage.addChild(betPanel)
+        this.appStage.addChild(ProgressPanel.betPanel)
 
-        const winPanel = this.createTextTexture(
-            "Win: " + this.win, 
+        ProgressPanel.winPanel = this.createTextTexture(
+            "Win: " + ProgressPanel.win, 
             (this.rendererWidth - 800) / 2 + 570, 
             600
         );
-        this.appStage.addChild(winPanel)
+        this.appStage.addChild(ProgressPanel.winPanel)
     }
 
     /**
      * set user bet
      */
-    static setUserBet(bet){
-        this.bet = bet //curently user bet not roulette number
+    static setUserBet(userBet){
+        ProgressPanel.userBet = userBet //curently user bet not roulette number
+    }
+
+    /**
+     * set roulette current number
+     */
+    static setRouletteCurNumber(rouletteCurNumber){
+        this.rouletteCurNumber = rouletteCurNumber //curently roulette's rotate number
     }
 
     /**
      * check current bellance
      */
-    checkBallance(){
-
-
-        //return true or false
+    static checkBalance(){
+        if(ProgressPanel.balance >= 5){
+            return true
+        }
+        return false
     }
 
     /**
      * set bellance
      */
-    setBellance(userNumber, rouletteNumber){
+    static setBellance(){
 
         /**
-         * set ballance
+         * if is not game over for user
          */
+        if(ProgressPanel.checkBalance()){
+
+            if(this.rouletteCurNumber === ProgressPanel.userBet){
+                
+                /**
+                 * set winner balance
+                 */
+                ProgressPanel.updateUserBalance(ProgressPanel.userBet)
+                
+            }else{
+
+                /**
+                 * set looser balance
+                 */
+                ProgressPanel.win = 0
+                ProgressPanel.balance = ProgressPanel.balance - ProgressPanel.userBet
+
+            }
+
+            /**
+             * update progress panel
+             */
+            ProgressPanel.updateProgressPanelText()
+
+            /**
+             * update user status game
+             */
+            ProgressPanel.statusGame = true
+
+        }else{
+            ProgressPanel.statusGame = false
+        }
     }
 
-
-    setStatusGame(){
-
-        /**
-         * get current bellance
-         */
-
-        /**
-         * set current bellance
-         */
-        //this.setBellance(userNumber, rouletteNumber)
-
-        /**
-         * if sum ballance >= 5 continue game
-         */
-
-
-        return ProgressPanel.statusGame
+    static updateProgressPanelText() {
+        ProgressPanel.balancePanel.text = `Balance: ${ProgressPanel.balance}`
+        //ProgressPanel.betPanel.text = `Bet: ${ProgressPanel.userBet}`
+        ProgressPanel.winPanel.text = `Win: ${ProgressPanel.win}`
     }
 
+    static updateUserBalance(userBet) {
+        switch (userBet) {
+            case 1:
+                ProgressPanel.win = userBet * 2
+                break
+            case 3:
+                ProgressPanel.win = userBet * 3
+                break
+            case 5:
+                ProgressPanel.win = userBet * 6
+                break
 
+            default:
+                ProgressPanel.win = 0
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-    setWheelNumber(value) {
-        this.wheelNumber = value;
+        if (ProgressPanel.win > 0) {
+            ProgressPanel.balance = ProgressPanel.balance + ProgressPanel.win
+        }
     }
-
 }
