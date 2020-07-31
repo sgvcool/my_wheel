@@ -116,8 +116,11 @@ class ProgressPanel extends Helper{
      */
     static checkBalance(){
         if(ProgressPanel.balance >= 5){
+            ProgressPanel.statusGame = true
             return true
         }
+
+        ProgressPanel.statusGame = false
         return false
     }
 
@@ -153,20 +156,18 @@ class ProgressPanel extends Helper{
              */
             ProgressPanel.updateProgressPanelText()
 
-            /**
-             * update user status game
-             */
-            ProgressPanel.statusGame = true
-
         }else{
             ProgressPanel.statusGame = false
         }
     }
 
     static updateProgressPanelText() {
+
         ProgressPanel.balancePanel.text = `Balance: ${ProgressPanel.balance}`
-        //ProgressPanel.betPanel.text = `Bet: ${ProgressPanel.userBet}`
+        ProgressPanel.betPanel.text = `Bet: ${ProgressPanel.userBet}`
         ProgressPanel.winPanel.text = `Win: ${ProgressPanel.win}`
+
+        ProgressPanel.checkBalance()
     }
 
     static updateUserBalance(userBet) {

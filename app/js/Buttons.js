@@ -120,8 +120,10 @@ class Buttons extends Helper{
                 /**
                  * set alert of game over
                  */
-                alert('Sorry, but GAME OVER! Give me money to continue game CN ... ... ... ...')
-                location.reload()
+                setTimeout(function () {
+                    alert('Sorry, but GAME OVER! Give me money to continue game CARD NUMBER ... ... ... ...')
+                    location.reload()
+                },500)
             }
 
           }, 3000)
@@ -179,4 +181,3 @@ class Buttons extends Helper{
         btn.tint = 0xffffff
     }
 }
-
