@@ -17,7 +17,7 @@ class WheelOfFortune extends Helper{
      */
     static sectorDegree = 0 // default sector, on strart 0 then 30
 
-    static totalRandom = 0
+    static totalSectorsRotate = 0
     static currentSectorPosition = 0
     
     /**
@@ -45,11 +45,13 @@ class WheelOfFortune extends Helper{
      */
     rotate() {
         const random = Math.floor(Math.random() * (12 - 1)) + 1;
-        
+
         if (WheelOfFortune.sectorDegree === 0) {
             WheelOfFortune.extCircleImg.angle += 15 // middle our ext roulette img
             WheelOfFortune.intCircleImg.angle += 30 // ot baldy
+
             WheelOfFortune.sectorDegree = 30 // one sector in degre
+          
         } else {
 
             /**
@@ -58,16 +60,17 @@ class WheelOfFortune extends Helper{
             WheelOfFortune.extCircleImg.angle += WheelOfFortune.sectorDegree * random
             WheelOfFortune.intCircleImg.angle += WheelOfFortune.sectorDegree * random
 
-            WheelOfFortune.totalRandom += random
+            WheelOfFortune.totalSectorsRotate += random // total count our sectors, we will rotate in animation
         }
+
     }
 
     /**
      * set roulette number after user click and set bet
      */
     static getRouletteNumber() {
-
-        for (var i = 0; i < WheelOfFortune.totalRandom; i++) {
+        for (var i = 0; i < WheelOfFortune.totalSectorsRotate; i++) {
+            
             if (WheelOfFortune.currentSectorPosition < 11) {
                 WheelOfFortune.currentSectorPosition++
             } else {
@@ -75,7 +78,7 @@ class WheelOfFortune extends Helper{
             }
         }
 
-        WheelOfFortune.totalRandom = 0
+        WheelOfFortune.totalSectorsRotate = 0
         return WheelOfFortune.showRouletteNumbers[WheelOfFortune.currentSectorPosition]
     }
 
